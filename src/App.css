@@ -12,6 +12,10 @@
     background-color: #EEEEEE;
     font-size: calc(10px + 4vmin);
 }
+.App-header a {
+    cursor: pointer;
+    text-decoration: underline;
+}
 
 .App-header div {
     margin: auto;

@@ -18,6 +18,13 @@
     border: 2px solid #888888;
 }
 
+.Content .div__header {
+    font-size: calc(8px + 2vmin);
+    color: #888888;
+    margin-bottom: 10px;
+    text-decoration: underline;
+}
+
 .Up {
     color: green;
 }

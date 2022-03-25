@@ -1,13 +1,15 @@
 import './App.css';
 import {ExchangeRateTable} from "./Components/ExchangeRateTable";
-import {Route, Routes, Navigate} from "react-router-dom";
+import {Route, Routes, Navigate, useNavigate} from "react-router-dom";
 
 function App() {
-  return (
+    const navigate = useNavigate();
+
+    return (
         <div className="App">
           <header className="App-header">
             <div>
-              header
+                <a onClick={() => navigate("/home")}>home</a>
             </div>
           </header>
           <aside className="App-sidebar">

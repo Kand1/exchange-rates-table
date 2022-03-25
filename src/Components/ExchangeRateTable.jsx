@@ -6,28 +6,33 @@ import ReactTooltip from "react-tooltip";
 import {useNavigate, useParams} from "react-router-dom";
 
 //Составленеи таблицы об одной валюте
-const createValuteChangeTable = (data) => {
+const createValuteChangeTable = (data, navigate, name) => {
     return (
-        <table>
-            {data.map(el => {
-                return (
-                    <tr>
-                        <td>
-                            {el[0]}
-                        </td>
+        <div>
+            <div className="div__header">
+                {name}
+            </div>
+            <table>
+                {data.map(el => {
+                    return (
+                        <tr>
+                            <td>
+                                {el[0]}
+                            </td>
 
-                        <td>
-                            {el[1]}
-                        </td>
+                            <td>
+                                {el[1] + '₽'}
+                            </td>
 
-                        <td className={el[1] > el[2] ? 'Up' : 'Down'}>
-                            {(el[1] > el[2] ? '▲' : '▼') +
-                                Math.abs((el[1] - el[2]) / el[2] * 100).toFixed(4) + '%'}
-                        </td>
-                    </tr>
-                )
-            })}
-        </table>
+                            <td className={el[1] > el[2] ? 'Up' : 'Down'}>
+                                {(el[1] > el[2] ? '▲' : '▼') +
+                                    Math.abs((el[1] - el[2]) / el[2] * 100).toFixed(4) + '%'}
+                            </td>
+                        </tr>
+                    )
+                })}
+            </table>
+        </div>
     )
 }
 //Составление таблицы валют
@@ -92,7 +97,7 @@ export const ExchangeRateTable = (props) => {
     let tableJSX = null;
     if (hasProperty && id === state.id && state.valuteData) {
         console.log("check", state)
-        tableJSX = createValuteChangeTable(state.valuteData);
+        tableJSX = createValuteChangeTable(state.valuteData, navigate, state.currentDate.Valute[id].Name);
     } else {
         if (id !== "home") {
             tableJSX = <div>Пожалуйста подождите.</div>;
