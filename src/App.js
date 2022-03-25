@@ -1,24 +1,26 @@
-import logo from './logo.svg';
 import './App.css';
+import {ExchangeRateTable} from "./Components/ExchangeRateTable";
 
 function App() {
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
+      <div className="App">
+        <header className="App-header">
+          <div>
+            header
+          </div>
+        </header>
+        <aside className="App-sidebar">
+          <div>
+            sidebar
+          </div>
+        </aside>
+        <ExchangeRateTable/>
+        <footer className="App-footer">
+          <div>
+            footer
+          </div>
+        </footer>
+      </div>
   );
 }
 

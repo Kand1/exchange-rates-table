@@ -1,0 +1,27 @@
+.Content table {
+    font-size: calc(1vmin + 8px);
+    border-collapse: collapse;
+    table-layout: auto;
+    width: 99%;
+}
+
+.Content table td {
+    display: table-cell;
+    border: 1px solid #DDDDDD;
+    text-align: center;
+    padding: 1.5vh;
+    box-sizing: border-box;
+}
+
+
+.Content table tr:hover {
+    border: 2px solid #888888;
+}
+
+.Up {
+    color: green;
+}
+
+.Down {
+    color: red;
+}
