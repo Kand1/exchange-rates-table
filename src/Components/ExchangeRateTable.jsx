@@ -1,15 +1,42 @@
 import React, {useEffect, useState} from "react";
 import '../App.css';
 import './ExchangeRateTable.css';
-import {getCurrentDateData, getPastDateData} from "../Api/api";
+import {getCurrentDateData, getPastDateData, getValutePastData} from "../Api/api";
 import ReactTooltip from "react-tooltip";
+import {useNavigate, useParams} from "react-router-dom";
 
-const createTableFromData = (data) => {
+//Составленеи таблицы об одной валюте
+const createValuteChangeTable = (data) => {
+    return (
+        <table>
+            {data.map(el => {
+                return (
+                    <tr>
+                        <td>
+                            {el[0]}
+                        </td>
+
+                        <td>
+                            {el[1]}
+                        </td>
+
+                        <td className={el[1] > el[2] ? 'Up' : 'Down'}>
+                            {(el[1] > el[2] ? '▲' : '▼') +
+                                Math.abs((el[1] - el[2]) / el[2] * 100).toFixed(4) + '%'}
+                        </td>
+                    </tr>
+                )
+            })}
+        </table>
+    )
+}
+//Составление таблицы валют
+const createTableFromData = (data, navigate) => {
     let valuteObj = data.currentDate.Valute;
     let tableJSX = [];
     for (let key in valuteObj) {
         tableJSX.push(
-            <tr data-tip data-for={key}>
+            <tr onClick={() => {navigate("/" + key)}} data-tip data-for={key}>
                 <td>
                     {valuteObj[key].CharCode + ' ' + valuteObj[key].NumCode}
                 </td>
@@ -35,19 +62,44 @@ const createTableFromData = (data) => {
 
 export const ExchangeRateTable = (props) => {
 
-    let [state, setState] = useState({currentDate: null});
+    let [state, setState] = useState({currentDate: null, valuteData: null, id: null});
+    const { id } = useParams();
+    const navigate = useNavigate();
 
     useEffect(() => {
         getCurrentDateData().then(
             (data) => {
-                setState({currentDate: data})
+                setState({currentDate: data, valuteData: state.valuteData, id: state.id})
             }
         )
-    }, [])
+    }, []);
 
-    console.log(state);
 
-    let tableJSX = state.currentDate ? createTableFromData(state) : <div>Пожалуйста подождите.</div>;
+    //Является ли id в url наименованием валюты
+    let hasProperty = state.currentDate ? state.currentDate.Valute[id] !== undefined : false;
+
+    //Загрузка данных о конкретной валюте (если нужно)
+    if (hasProperty && id !== state.id && state.currentDate) {
+        let valuteDataInProcess = [[state.currentDate.Date, state.currentDate.Valute[id].Value, state.currentDate.Valute[id].Previous]];
+        let url = state.currentDate.PreviousURL;
+        getValutePastData(valuteDataInProcess, id, url, 8).then(data => {
+            valuteDataInProcess = data;
+            setState({currentDate: state.currentDate, valuteData: valuteDataInProcess, id: id});
+        });
+    }
+
+    //Выбор таблицы
+    let tableJSX = null;
+    if (hasProperty && id === state.id && state.valuteData) {
+        console.log("check", state)
+        tableJSX = createValuteChangeTable(state.valuteData);
+    } else {
+        if (id !== "home") {
+            tableJSX = <div>Пожалуйста подождите.</div>;
+        } else {
+            tableJSX = state.currentDate ? createTableFromData(state, navigate) : <div>Пожалуйста подождите.</div>;
+        }
+    }
 
     return (
         <div className="Content">
